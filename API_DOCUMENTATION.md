@@ -857,7 +857,7 @@ curl http://localhost:8080/terms/l
 
 ### 🔗 Related Documentation
 
-[📖 Back to README](./README.md) | [📋 Project Summary](./PROJECT_SUMMARY.md)
+[📖 Back to README](./README.md) | [📋 Project Summary](./PROJECT_STATUS.md)
 
 ---
 

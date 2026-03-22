@@ -84,7 +84,7 @@ Comprehensive endpoint documentation with request/response examples, validation 
 ### 📋 **Project Summary**
 Detailed project overview, features, architecture, and completion status.
 
-**👉 [View Project Summary](./PROJECT_SUMMARY.md)**
+**👉 [View Project Summary](./PROJECT_STATUS.md)**
 
 ### 🎯 **This README**
 Project overview and quick reference guide.
