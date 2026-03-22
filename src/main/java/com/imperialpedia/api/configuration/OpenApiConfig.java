@@ -32,9 +32,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title(appData.getName())
                         .version(appData.getVersion())
-                        .description(appData.getSwaggerDescription() + "\n\n" +
-                                "### Documentation style\n" +
-                                "Each endpoint includes required/optional parameters, limits, examples, and expected responses.")
+                        .description(appData.getSwaggerDescription())
                 );
     }
 }
