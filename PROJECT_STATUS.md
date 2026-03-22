@@ -70,7 +70,7 @@
 ## 🚀 Endpoints Available
 
 ### Term Retrieval
-- `GET /terms/{letter}` - Published terms by letter
+- `GET /terms/letter/{letter}` - Published terms by letter
 - `GET /terms/archived?letter=X` - Archived terms
 - `GET /terms/draft?letter=X` - Draft terms
 - `GET /terms/slug/{slug}` - Get by slug

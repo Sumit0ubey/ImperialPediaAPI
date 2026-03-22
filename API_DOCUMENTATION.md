@@ -94,7 +94,7 @@ All endpoints are publicly accessible. Authentication will be added in future ve
 Get all published terms that start with a specific letter.
 
 ```http
-GET /terms/{letter}
+GET /terms/letter/{letter}
 ```
 
 #### 📋 Parameters
