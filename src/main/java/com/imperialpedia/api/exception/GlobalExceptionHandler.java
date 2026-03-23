@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IntegrityViolationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleIntegrityViolation(ResourceAlreadyExistsException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Object>> handleIntegrityViolation(IntegrityViolationException ex, HttpServletRequest request) {
 
         return new ResponseEntity<>(
                 createErrorResponse(
@@ -55,14 +55,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ArgumentException.class)
-    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(ResourceAlreadyExistsException ex, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(ArgumentException ex, HttpServletRequest request) {
 
         return new ResponseEntity<>(
                 createErrorResponse(
                         400,
                         ex.getMessage(),
                         request.getRequestURI()
-                ), HttpStatus.CONFLICT);
+                ), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TooManyRequestsException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTooManyRequest(TooManyRequestsException ex, HttpServletRequest request) {
+
+        return new ResponseEntity<>(
+                createErrorResponse(
+                        429,
+                        ex.getMessage(),
+                        request.getRequestURI()
+                ), HttpStatus.TOO_MANY_REQUESTS);
     }
 
     private ApiResponse<Object> createErrorResponse(int status, String message, String path) {

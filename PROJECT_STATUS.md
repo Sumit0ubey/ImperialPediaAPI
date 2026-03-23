@@ -33,7 +33,7 @@
 ### ✅ Fully Functional REST API
 - **13 REST Endpoints** (12 term operations + 1 system info)
 - **4 HTTP Methods:** GET, POST, PUT, PATCH, DELETE
-- **Proper Status Codes:** 200, 201, 204, 400, 404, 409, 500
+- **Proper Status Codes:** 200, 201, 204, 400, 404, 409, 429, 500
 - **Consistent Response Format:** ApiResponse wrapper
 
 ### ✅ Complete Database Integration
@@ -48,6 +48,8 @@
 - Related term linking (by slug or UUID)
 - Complete input validation and normalization
 - Case-insensitive slug and category matching
+- Endpoint-specific, configurable rate limiting (Bucket4j)
+- Per-client and per-endpoint-group request buckets
 
 ### ✅ Clean Code Architecture
 - Service layer for business logic
@@ -58,7 +60,7 @@
 
 ### ✅ Documentation
 - **API_DOCUMENTATION.md** - Complete endpoint documentation
-- **PROJECT_SUMMARY.md** - Project overview and features
+- **README.md** - Project overview and quick reference
 - Every endpoint documented with:
     - Request/response examples
     - Validation rules
@@ -70,25 +72,25 @@
 ## 🚀 Endpoints Available
 
 ### Term Retrieval
-- `GET /terms/letter/{letter}` - Published terms by letter
-- `GET /terms/archived?letter=X` - Archived terms
-- `GET /terms/draft?letter=X` - Draft terms
-- `GET /terms/slug/{slug}` - Get by slug
-- `GET /terms/{id}` - Get by UUID
+- `GET /api/terms/letter/{letter}` - Published terms by letter
+- `GET /api/terms/archived?letter=X` - Archived terms
+- `GET /api/terms/draft?letter=X` - Draft terms
+- `GET /api/terms/slug/{slug}` - Get by slug
+- `GET /api/terms/{id}` - Get by UUID
 
 ### Term Operations
-- `POST /terms/create` - Create term
-- `PUT /terms/update/{id}` - Full update
-- `PATCH /terms/update/{id}` - Partial update
-- `DELETE /terms/delete/{id}` - Delete term
+- `POST /api/terms/create` - Create term
+- `PUT /api/terms/update/{id}` - Full update
+- `PATCH /api/terms/update/{id}` - Partial update
+- `DELETE /api/terms/delete/{id}` - Delete term
 
 ### Status Management
-- `PUT /terms/publish/{id}` - Publish
-- `PUT /terms/draft/{id}` - Move to draft
-- `PUT /terms/archive/{id}` - Archive
+- `PUT /api/terms/publish/{id}` - Publish
+- `PUT /api/terms/draft/{id}` - Move to draft
+- `PUT /api/terms/archive/{id}` - Archive
 
 ### System
-- `GET /` - API info
+- `GET /api/` - API info
 
 ---
 
@@ -98,6 +100,7 @@
 ✅ Clean code architecture. <br/>
 ✅ Comprehensive validation. <br/>
 ✅ Consistent error handling. <br/>
+✅ Configurable endpoint rate limiting. <br/>
 ✅ Production-ready quality. <br/>
 ✅ Zero compilation errors. <br/>
 ✅ All tests passing. <br/>
@@ -127,5 +130,5 @@ All files are in the project root directory.
 
 **Status: READY FOR PRODUCTION** ✅
 
-**Last Build:** March 22, 2026, 11:13 AM IST  
+**Last Build:** March 23, 2026  
 **All Systems:** GREEN ✅

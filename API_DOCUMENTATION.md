@@ -19,18 +19,19 @@
 1. [🌐 Overview](#-overview)
 2. [📊 Global Response Format](#-global-response-format)
 3. [🔐 Authentication](#-authentication)
-4. [📥 Retrieval Endpoints](#-retrieval-endpoints)
-5. [✍️ Creation Endpoint](#️-creation-endpoint)
-6. [🔄 Update Endpoints](#-update-endpoints)
-7. [🎛️ Status Management](#️-status-management)
-8. [🗑️ Deletion Endpoint](#️-deletion-endpoint)
-9. [📦 Data Models](#-data-models)
-10. [✔️ Validation Rules](#️-validation-rules)
-11. [⚠️ Error Handling](#️-error-handling)
-12. [💡 Examples](#-examples)
-13. [🗄️ Database Constraints](#️-database-constraints)
-14. [📈 HTTP Status Codes](#-http-status-codes)
-15. [🗂️ Changelog](#️-changelog)
+4. [⏱️ Rate Limiting](#️-rate-limiting)
+5. [📥 Retrieval Endpoints](#-retrieval-endpoints)
+6. [✍️ Creation Endpoint](#️-creation-endpoint)
+7. [🔄 Update Endpoints](#-update-endpoints)
+8. [🎛️ Status Management](#️-status-management)
+9. [🗑️ Deletion Endpoint](#️-deletion-endpoint)
+10. [📦 Data Models](#-data-models)
+11. [✔️ Validation Rules](#️-validation-rules)
+12. [⚠️ Error Handling](#️-error-handling)
+13. [💡 Examples](#-examples)
+14. [🗄️ Database Constraints](#️-database-constraints)
+15. [📈 HTTP Status Codes](#-http-status-codes)
+16. [🗂️ Changelog](#️-changelog)
 
 ---
 
@@ -40,11 +41,11 @@
 
 | Property | Value |
 |----------|-------|
-| **Base URL** | `http://localhost:8080` |
+| **Base URL** | `http://localhost:8080/api` |
 | **API Version** | 1.0.0-SNAPSHOT |
 | **Content Type** | `application/json` |
 | **Authentication** | None (Public API) |
-| **Rate Limiting** | None |
+| **Rate Limiting** | Enabled (Bucket4j, configurable) |
 
 ---
 
@@ -73,6 +74,7 @@ All endpoints return responses wrapped in the standard `ApiResponse<T>` envelope
   "success": false,
   "statusCode": 400,
   "message": "Error description",
+  "path": "/api/terms/letter/a",
   "timestamp": "2026-03-22T11:13:15"
 }
 ```
@@ -87,7 +89,28 @@ All endpoints are publicly accessible. Authentication will be added in future ve
 
 ---
 
+## ⏱️ Rate Limiting
+
+Rate limiting is active and configurable via `application.properties` under `rate-limit.*`.
+
+### Current Behavior
+
+- Rules are evaluated from top to bottom (`rate-limit.rules[index]`)
+- First matching rule is applied
+- Endpoint groups have independent counters
+- Buckets are isolated per client and group (`clientKey:group`)
+- Exceeded limits return `429 Too Many Requests`
+
+### Client Key Resolution
+
+- Uses first IP from `X-Forwarded-For` when present
+- Falls back to `request.getRemoteAddr()`
+
+---
+
 ## 📥 Retrieval Endpoints
+
+> All endpoint paths below are relative to the API base path `/api`.
 
 ### 1.1 Get Published Terms by Letter
 
@@ -678,6 +701,7 @@ Summary information of a related term.
   "success": false,
   "statusCode": 400,
   "message": "Descriptive error message",
+  "path": "/api/terms/create",
   "timestamp": "2026-03-22T11:13:15"
 }
 ```
@@ -689,6 +713,7 @@ Summary information of a related term.
 | 400 | Bad Request | Validation | Invalid input, blank required field, invalid format |
 | 404 | Not Found | Resource | Term/slug/category doesn't exist |
 | 409 | Conflict | Integrity | Slug already exists, duplicate entry |
+| 429 | Too Many Requests | Throttling | Request quota exceeded for matched endpoint group |
 | 500 | Server Error | System | Unexpected server error |
 
 ---
@@ -699,7 +724,7 @@ Summary information of a related term.
 
 #### Request
 ```bash
-curl -X POST http://localhost:8080/terms/create \
+curl -X POST http://localhost:8080/api/terms/create \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Luke Skywalker",
@@ -737,7 +762,7 @@ curl -X POST http://localhost:8080/terms/create \
 
 #### Request
 ```bash
-curl -X PATCH http://localhost:8080/terms/update/550e8400-e29b-41d4-a716-446655440000 \
+curl -X PATCH http://localhost:8080/api/terms/update/550e8400-e29b-41d4-a716-446655440000 \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Luke Skywalker - Jedi Master"
@@ -767,7 +792,7 @@ curl -X PATCH http://localhost:8080/terms/update/550e8400-e29b-41d4-a716-4466554
 
 #### Request
 ```bash
-curl http://localhost:8080/terms/l
+curl http://localhost:8080/api/terms/letter/l
 ```
 
 #### Response
@@ -824,6 +849,7 @@ curl http://localhost:8080/terms/l
 | 400 | 400 | Bad Request | Input validation failed |
 | 404 | 404 | Not Found | Resource doesn't exist |
 | 409 | 409 | Conflict | Duplicate slug/integrity violation |
+| 429 | 429 | Too Many Requests | Endpoint-specific rate limit exceeded |
 | 500 | 500 | Server Error | Unexpected server error |
 
 ---
@@ -848,7 +874,6 @@ curl http://localhost:8080/terms/l
 **Known Limitations:**
 - ❌ No authentication (will be added in v2.0)
 - ❌ No pagination (returns all results)
-- ❌ No rate limiting
 - ❌ No caching layer
 
 ---
@@ -861,7 +886,7 @@ curl http://localhost:8080/terms/l
 
 ---
 
-**Last Updated:** March 22, 2026  
+**Last Updated:** March 23, 2026  
 **API Version:** 1.0.0-SNAPSHOT  
 **Status:** ✅ Production Ready
 

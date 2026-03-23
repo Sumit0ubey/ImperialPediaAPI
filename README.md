@@ -10,7 +10,7 @@
 ![Maven](https://img.shields.io/badge/Maven-Build-orange?style=for-the-badge&logo=apache-maven)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**Status:** ![Build](https://img.shields.io/badge/Build-PASSING-brightgreen?style=flat-square) 
+**Status:** ![Build](https://img.shields.io/badge/Build-PASSING-brightgreen?style=flat-square)
 ![Tests](https://img.shields.io/badge/Tests-1%2F1%20PASSED-brightgreen?style=flat-square)
 ![Code Quality](https://img.shields.io/badge/Code%20Quality-A%2B-brightgreen?style=flat-square)
 ![Deployment Ready](https://img.shields.io/badge/Deployment-Ready-brightgreen?style=flat-square)
@@ -43,7 +43,7 @@
 
 - **Build Status:** ✅ SUCCESS (0 Errors, 0 Warnings)
 - **Test Coverage:** ✅ 1/1 PASSED
-- **Compilation:** ✅ 29/29 Source Files
+- **Compilation:** ✅ 32/32 Source Files
 - **Deployment Ready:** ✅ YES
 
 ---
@@ -70,7 +70,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The API will be available at `http://localhost:8080`
+The API will be available at `http://localhost:8080/api`
 
 ---
 
@@ -153,6 +153,12 @@ Project overview and quick reference guide.
 - ✅ Error handling
 - ✅ Timestamp tracking
 
+### ⚡ Request Protection
+- ✅ Configurable rate limiting (Bucket4j)
+- ✅ Endpoint-specific limit groups
+- ✅ Per-client bucket separation
+- ✅ Standard `429 Too Many Requests`
+
 </td>
 </tr>
 </table>
@@ -225,7 +231,11 @@ src/main/java/com/imperialpedia/api/
 │   ├── ArgumentException.java         │ Input validation errors
 │   ├── ResourceNotFoundException.java │ 404 errors
 │   ├── ResourceAlreadyExistsException.java │ 409 errors
-│   └── IntegrityViolationException.java    │ Data integrity errors
+│   ├── IntegrityViolationException.java    │ Data integrity errors
+│   └── TooManyRequestsException.java       │ 429 errors
+
+├── 🚦 filter/
+│   └── RateLimitFilter.java           │ Request throttling
 │
 ├── 📤 response/
 │   └── ApiResponse.java               │ Response wrapper
@@ -236,7 +246,8 @@ src/main/java/com/imperialpedia/api/
 ├── ⚙️ configuration/
 │   ├── ModelMapperConfig.java         │ DTO mapping config
 │   ├── OpenApiConfig.java             │ Swagger/OpenAPI setup
-│   └── AppData.java                   │ App metadata
+│   ├── AppData.java                   │ App metadata
+│   └── RateLimitProperties.java       │ Rate-limit rule config
 │
 └── 📋 interfaces/
     └── TermServiceInterface.java      │ Service contract
@@ -250,11 +261,13 @@ src/main/java/com/imperialpedia/api/
 
 | Endpoint | Purpose |
 |----------|---------|
-| `GET /terms/{letter}` | Published terms starting with letter |
+| `GET /terms/letter/{letter}` | Published terms starting with letter |
 | `GET /terms/archived?letter=X` | Archived terms (optional letter filter) |
 | `GET /terms/draft?letter=X` | Draft terms (optional letter filter) |
 | `GET /terms/slug/{slug}` | Term by slug |
 | `GET /terms/{id}` | Term by UUID |
+
+> Base path: all endpoints are served under `/api`.
 
 ### ✍️ **Creation Endpoint** (POST)
 
@@ -356,7 +369,7 @@ Tests Run:      1/1
 Failures:       0
 Errors:         0
 Success Rate:   100%
-Compilation:    29/29 ✅
+Compilation:    32/32 ✅
 Warnings:       0
 ```
 
@@ -396,6 +409,7 @@ All endpoints return consistent `ApiResponse<T>` wrapper:
 | 400 | Bad Request | Validation failed |
 | 404 | Not Found | Resource missing |
 | 409 | Conflict | Duplicate slug |
+| 429 | Too Many Requests | Rate limit exceeded |
 | 500 | Server Error | Unexpected error |
 
 ---
@@ -421,7 +435,6 @@ Priority enhancements for future versions:
 
 - 🔐 **Authentication & Authorization** (Spring Security)
 - 📄 **Pagination** (for list endpoints)
-- ⏱️ **Rate Limiting** (API throttling)
 - 🔍 **Full-Text Search** (Elasticsearch)
 - 💾 **Caching Layer** (Redis)
 - 📊 **Audit Trail** (request logging)
@@ -440,9 +453,17 @@ Create `.env` file in project root (not included in Git):
 
 ```env
 # Database Configuration
-DATABASE_URL=jdbc:postgresql://localhost:5432/imperialpedia
-DATABASE_USER=postgres
+DATABASE_HOST=localhost:5432
+DATABASE_NAME=imperialpedia
+DATABASE_USERNAME=postgres
 DATABASE_PASSWORD=your_password
+
+# App Metadata
+APP_NAME="ImperialPedia API"
+APP_DESCRIPTION="Backed service for ImperialPedia platform"
+APP_VERSION=1.0.0
+APP_ENVIRONMENT=local
+APP_STATUS=active
 
 # Server Configuration
 SERVER_PORT=8080
@@ -508,9 +529,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👥 Team
 
-**Development Team:** Full Stack Development  
-**Project Lead:** Architecture & Design  
-**Last Updated:** March 22, 2026
+**Development Team:** Full Stack Development
+**Project Lead:** Architecture & Design
+**Last Updated:** March 23, 2026
 
 ---
 
