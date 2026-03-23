@@ -60,7 +60,7 @@
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/Sumit0ubey/ImperialPediaAPI
 cd imperialpedia_api
 
 # Build the project
