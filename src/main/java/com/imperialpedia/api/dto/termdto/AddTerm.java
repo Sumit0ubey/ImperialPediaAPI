@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -57,7 +56,4 @@ public class AddTerm {
     @Schema(description = "Related term titles for lightweight linking (max 20 items)", example = "[\"Data Structure\",\"Complexity\"]")
     @Size(max = 20, message = "At most 20 related terms are allowed")
     private List<@NotBlank(message = "Related term name cannot be blank") @Size(max = 255, message = "Related term name must be at most 255 characters") String> relatedTerms = new ArrayList<>();
-
-    @Schema(description = "Related term IDs for direct links to existing terms", example = "[\"123e4567-e89b-12d3-a456-426614174000\"]")
-    private List<UUID> relatedTermIds = new ArrayList<>();
 }

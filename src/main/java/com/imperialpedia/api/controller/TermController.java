@@ -155,7 +155,7 @@ public class TermController {
                     - `title`, `slug`, `content`
 
                     **Optional Body Fields**
-                    - `seoTitle`, `seoDescription`, `featuredImageUrl`, `status`, `categoryNames`, `relatedTerms`, `relatedTermIds`
+                    - `seoTitle`, `seoDescription`, `featuredImageUrl`, `status`, `categoryNames`, `relatedTerms`
 
                     **Limits**
                     - `title`, `slug`, `content`: max 255 chars
@@ -199,8 +199,7 @@ public class TermController {
                                                       "featuredImageUrl": "https://cdn.example.com/terms/algorithm.png",
                                                       "status": "PUBLISHED",
                                                       "categoryNames": ["Computer Science", "Programming"],
-                                                      "relatedTerms": ["Data Structure", "Complexity"],
-                                                      "relatedTermIds": ["123e4567-e89b-12d3-a456-426614174000"]
+                                                      "relatedTerms": ["Data Structure", "Complexity"]
                                                     }
                                                     """
                                     )

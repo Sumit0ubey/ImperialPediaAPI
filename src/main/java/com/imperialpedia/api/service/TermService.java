@@ -40,8 +40,7 @@ public class TermService implements TermServiceInterface {
             "featuredImageUrl",
             "status",
             "categoryNames",
-            "relatedTerms",
-            "relatedTermIds"
+            "relatedTerms"
     );
 
     @Override
@@ -189,19 +188,9 @@ public class TermService implements TermServiceInterface {
             term.setCategories(resolveCategoriesByName(TermInputUtils.getStringList(request.get("categoryNames"), "categoryNames")));
         }
 
-        boolean hasRelatedPatch = request.containsKey("relatedTerms") || request.containsKey("relatedTermIds");
-        if (hasRelatedPatch) {
+        if (request.containsKey("relatedTerms")) {
             AddTerm relatedRequest = new AddTerm();
-            List<String> relatedTerms = request.containsKey("relatedTerms")
-                    ? TermInputUtils.getStringList(request.get("relatedTerms"), "relatedTerms")
-                    : new ArrayList<>();
-            List<UUID> relatedTermIds = request.containsKey("relatedTermIds")
-                    ? TermInputUtils.getUuidList(request.get("relatedTermIds"), "relatedTermIds")
-                    : new ArrayList<>();
-
-            relatedRequest.setRelatedTerms(relatedTerms);
-            relatedRequest.setRelatedTermIds(relatedTermIds);
-
+            relatedRequest.setRelatedTerms(TermInputUtils.getStringList(request.get("relatedTerms"), "relatedTerms"));
             term.setRelatedTerms(buildRelatedLinks(term, resolveRelatedTerms(relatedRequest)));
         }
 
@@ -363,42 +352,24 @@ public class TermService implements TermServiceInterface {
     }
 
     private List<Term> resolveRelatedTerms(AddTerm request) {
-        LinkedHashSet<UUID> relatedIds = new LinkedHashSet<>();
-
-        if (request.getRelatedTermIds() != null) {
-            relatedIds.addAll(request.getRelatedTermIds());
-        }
-
         List<String> requestedSlugs = TermInputUtils.normalizeRelatedTermSlugs(request.getRelatedTerms());
-        if (!requestedSlugs.isEmpty()) {
-            List<Term> termsFromSlugs = termRepository.findBySlugIn(requestedSlugs);
-
-            Set<String> foundSlugs = termsFromSlugs.stream()
-                    .map(Term::getSlug)
-                    .collect(LinkedHashSet::new, LinkedHashSet::add, LinkedHashSet::addAll);
-
-            List<String> missingSlugs = requestedSlugs.stream()
-                    .filter(slug -> !foundSlugs.contains(slug))
-                    .toList();
-
-            if (!missingSlugs.isEmpty()) {
-                throw new ResourceNotFoundException(
-                        "Related terms not found for slugs: " + String.join(", ", missingSlugs)
-                );
-            }
-
-            termsFromSlugs.stream()
-                    .map(Term::getId)
-                    .forEach(relatedIds::add);
-        }
-
-        if (relatedIds.isEmpty()) {
+        if (requestedSlugs.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<Term> relatedTargets = termRepository.findAllById(relatedIds);
-        if (relatedTargets.size() != relatedIds.size()) {
-            throw new ResourceNotFoundException("One or more related term IDs are invalid");
+        List<Term> relatedTargets = termRepository.findBySlugIn(requestedSlugs);
+        Set<String> foundSlugs = relatedTargets.stream()
+                .map(Term::getSlug)
+                .collect(LinkedHashSet::new, LinkedHashSet::add, LinkedHashSet::addAll);
+
+        List<String> missingSlugs = requestedSlugs.stream()
+                .filter(slug -> !foundSlugs.contains(slug))
+                .toList();
+
+        if (!missingSlugs.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Related terms not found for: " + String.join(", ", missingSlugs)
+            );
         }
 
         return relatedTargets;

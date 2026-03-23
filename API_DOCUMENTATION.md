@@ -297,8 +297,7 @@ Content-Type: application/json
   "featuredImageUrl": "https://example.com/darth-vader.jpg",
   "status": "DRAFT",
   "categoryNames": ["Characters", "Sith", "Villains"],
-  "relatedTerms": ["anakin-skywalker", "luke-skywalker"],
-  "relatedTermIds": ["uuid1", "uuid2"]
+  "relatedTerms": ["Anakin Skywalker", "Luke Skywalker"]
 }
 ```
 
@@ -314,8 +313,7 @@ Content-Type: application/json
 | `featuredImageUrl` | String | ❌ | Max 500 chars, URL format |
 | `status` | Enum | ❌ | DRAFT, PUBLISHED, ARCHIVED (default: DRAFT) |
 | `categoryNames` | String[] | ❌ | Max 20 items, auto-created if missing |
-| `relatedTerms` | String[] | ❌ | Max 20 slugs, must exist in DB |
-| `relatedTermIds` | UUID[] | ❌ | Max 20 UUIDs, must exist in DB |
+| `relatedTerms` | String[] | ❌ | Max 20 names/slugs, each resolved to an existing term |
 
 #### ✅ Success Response (201)
 
@@ -351,7 +349,7 @@ Content-Type: application/json
 |------|----------|
 | `400` | Validation failed (blank fields, invalid format) |
 | `409` | Slug already exists |
-| `404` | Related term slug/ID not found |
+| `404` | One or more related terms could not be resolved |
 
 ---
 
@@ -417,8 +415,7 @@ Content-Type: application/json
   "featuredImageUrl": "https://new-image-url.jpg",
   "status": "PUBLISHED",
   "categoryNames": ["NewCategory"],
-  "relatedTerms": ["slug1"],
-  "relatedTermIds": ["uuid1"]
+  "relatedTerms": ["Data Structure"]
 }
 ```
 
@@ -435,7 +432,6 @@ Content-Type: application/json
 | `status` | Enum | Updates status |
 | `categoryNames` | String[] | Replaces all categories |
 | `relatedTerms` | String[] | Replaces all related terms |
-| `relatedTermIds` | UUID[] | Replaces all related terms |
 
 #### ✅ Success Response (200)
 
