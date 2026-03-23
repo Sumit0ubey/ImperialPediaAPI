@@ -20,7 +20,15 @@ public final class TermInputUtils {
         }
 
         String trimmed = letter.trim();
-        return trimmed.isBlank() ? null : trimmed.toUpperCase(Locale.ROOT);
+        if (trimmed.isBlank()) {
+            return null;
+        }
+
+        if (trimmed.length() != 1 || !Character.isLetter(trimmed.charAt(0))) {
+            throw new ArgumentException("Letter must be a single alphabetic character");
+        }
+
+        return trimmed.toUpperCase(Locale.ROOT);
     }
 
     public static String normalizeRequiredLowercaseString(Object rawValue, String fieldName) {

@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;import java.util.UUID;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -15,7 +16,9 @@ import java.util.List;import java.util.UUID;
         @Index(name = "idx_term_slug", columnList = "slug", unique = true),
         @Index(name = "idx_term_letter", columnList = "letter"),
         @Index(name = "idx_term_status", columnList = "status"),
-        @Index(name = "idx_term_letter_status", columnList = "letter,status")
+        @Index(name = "idx_term_letter_status", columnList = "letter,status"),
+        @Index(name = "idx_term_status_title", columnList = "status,title"),
+        @Index(name = "idx_term_letter_status_title", columnList = "letter,status,title")
 })
 @NoArgsConstructor
 @AllArgsConstructor

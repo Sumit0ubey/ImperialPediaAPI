@@ -46,12 +46,13 @@ public class TermService implements TermServiceInterface {
 
     @Override
     public List<TermListResponse> getTermsByLetter(String letter) {
-        if (letter == null || letter.isBlank()) {
+        String normalizedLetter = TermInputUtils.normalizeOptionalLetter(letter);
+        if (normalizedLetter == null) {
             throw new ArgumentException("Letter must not be blank");
         }
 
-        List<Term> terms = termRepository.findByLetterAndStatusOrderByTitleAsc(
-                letter.trim().toUpperCase(Locale.ROOT),
+        List<TermListResponse> terms = termRepository.findListByLetterAndStatusOrderByTitleAsc(
+                normalizedLetter,
                 TermStatus.PUBLISHED
         );
 
@@ -59,9 +60,7 @@ public class TermService implements TermServiceInterface {
             throw new ResourceNotFoundException("No terms found for letter: " + letter);
         }
 
-        return terms.stream()
-                .map(term -> modelMapper.map(term, TermListResponse.class))
-                .toList();
+        return terms;
     }
 
     @Override
@@ -77,9 +76,9 @@ public class TermService implements TermServiceInterface {
     private List<TermListResponse> getTermsByStatusAndOptionalLetter(TermStatus status, String letter, String statusLabel) {
         String normalizedLetter = TermInputUtils.normalizeOptionalLetter(letter);
 
-        List<Term> terms = normalizedLetter == null
-                ? termRepository.findByStatusOrderByTitleAsc(status)
-                : termRepository.findByLetterAndStatusOrderByTitleAsc(normalizedLetter, status);
+        List<TermListResponse> terms = normalizedLetter == null
+                ? termRepository.findListByStatusOrderByTitleAsc(status)
+                : termRepository.findListByLetterAndStatusOrderByTitleAsc(normalizedLetter, status);
 
         if (terms.isEmpty()) {
             if (normalizedLetter == null) {
@@ -91,9 +90,7 @@ public class TermService implements TermServiceInterface {
             );
         }
 
-        return terms.stream()
-                .map(term -> modelMapper.map(term, TermListResponse.class))
-                .toList();
+        return terms;
     }
 
 
