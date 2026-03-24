@@ -283,6 +283,49 @@ Full TermDetailResponse with categories and related terms.
 
 ---
 
+### 1.6 Get Categories (Optional Letter Filter)
+
+Retrieve all categories, or filter categories by starting letter.
+
+```http
+GET /categories[?letter=X]
+```
+
+#### 📋 Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `letter` | String | ❌ No | Optional single alphabetic character (e.g., "?letter=A") |
+| | | | If blank/missing, returns all categories |
+
+#### ✅ Success Response (200)
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Categories retrieved successfully",
+  "data": [
+    {
+      "name": "architecture"
+    },
+    {
+      "name": "astronomy"
+    }
+  ],
+  "timestamp": "2026-03-24T11:20:00"
+}
+```
+
+#### ❌ Error Responses
+
+| Code | Scenario |
+|------|----------|
+| `400` | Invalid letter filter |
+| `404` | No categories found for the provided letter |
+
+---
+
 ## ✍️ Creation Endpoint
 
 ### 2.1 Create New Term
@@ -359,6 +402,46 @@ Content-Type: application/json
 | `400` | Validation failed (blank fields, invalid format) |
 | `409` | Slug already exists |
 | `404` | One or more related terms could not be resolved |
+
+---
+
+### 2.2 Create Category
+
+Create a new category.
+
+```http
+POST /categories/create
+Content-Type: application/json
+```
+
+#### 📥 Request Body
+
+```json
+{
+  "name": "Programming"
+}
+```
+
+#### ✅ Success Response (201)
+
+```json
+{
+  "success": true,
+  "statusCode": 201,
+  "message": "Category created successfully",
+  "data": {
+    "name": "programming"
+  },
+  "timestamp": "2026-03-24T11:20:00"
+}
+```
+
+#### ❌ Error Responses
+
+| Code | Scenario |
+|------|----------|
+| `400` | Validation failed |
+| `409` | Category already exists |
 
 ---
 
@@ -453,6 +536,86 @@ Full TermDetailResponse after patch.
 | `404` | Term not found |
 | `400` | Invalid field names or values |
 | `409` | Slug already exists |
+
+---
+
+### 3.3 Full Category Update (PUT)
+
+Completely replace category data.
+
+```http
+PUT /categories/update/{id}
+Content-Type: application/json
+```
+
+#### 📋 Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | Integer | ✅ Yes | Category id |
+
+#### 📥 Request Body
+
+```json
+{
+  "name": "Backend"
+}
+```
+
+#### ✅ Success Response (200)
+
+Returns updated `Categories` payload.
+
+#### ❌ Error Responses
+
+| Code | Scenario |
+|------|----------|
+| `404` | Category not found |
+| `400` | Validation failed |
+| `409` | Category already exists |
+
+---
+
+### 3.4 Partial Category Update (PATCH)
+
+Partially update category fields.
+
+```http
+PATCH /categories/update/{id}
+Content-Type: application/json
+```
+
+#### 📋 Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | Integer | ✅ Yes | Category id |
+
+#### 📥 Request Body
+
+```json
+{
+  "name": "Cloud Native"
+}
+```
+
+#### 📝 Patchable Fields
+
+| Field | Type | Effect |
+|-------|------|--------|
+| `name` | String | Updates category name and slug |
+
+#### ✅ Success Response (200)
+
+Returns updated `Categories` payload.
+
+#### ❌ Error Responses
+
+| Code | Scenario |
+|------|----------|
+| `404` | Category not found |
+| `400` | Invalid field names or values |
+| `409` | Category already exists |
 
 ---
 
@@ -569,6 +732,40 @@ DELETE /terms/delete/{id}
 |------|----------|
 | `404` | Term not found |
 | `400` | Invalid UUID |
+
+---
+
+### 5.2 Delete Category
+
+Delete a category if it is not linked to existing terms.
+
+```http
+DELETE /categories/delete/{id}
+```
+
+#### 📋 Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | Integer | ✅ Yes | Category id |
+
+#### ✅ Success Response (204)
+
+```json
+{
+  "success": true,
+  "statusCode": 204,
+  "message": "Category deleted successfully",
+  "timestamp": "2026-03-24T11:20:00"
+}
+```
+
+#### ❌ Error Responses
+
+| Code | Scenario |
+|------|----------|
+| `404` | Category not found |
+| `409` | Category is linked to existing terms |
 
 ---
 
@@ -876,6 +1073,7 @@ curl http://localhost:8080/api/terms/letter/l
 - ✅ Utility classes for input parsing
 - ✅ Complete error handling
 - ✅ Property-driven CORS configuration with startup validation
+- ✅ Category CRUD endpoints with optional letter-filter retrieval
 
 **Known Limitations:**
 - ❌ No authentication (will be added in v2.0)

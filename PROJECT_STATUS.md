@@ -79,11 +79,20 @@
 - `GET /api/terms/slug/{slug}` - Get by slug
 - `GET /api/terms/{id}` - Get by UUID
 
+### Category Retrieval
+- `GET /api/categories[?letter=X]` - All categories or by starting letter
+
 ### Term Operations
 - `POST /api/terms/create` - Create term
 - `PUT /api/terms/update/{id}` - Full update
 - `PATCH /api/terms/update/{id}` - Partial update
 - `DELETE /api/terms/delete/{id}` - Delete term
+
+### Category Operations
+- `POST /api/categories/create` - Create category
+- `PUT /api/categories/update/{id}` - Full category update
+- `PATCH /api/categories/update/{id}` - Partial category update
+- `DELETE /api/categories/delete/{id}` - Delete category
 
 ### Status Management
 - `PUT /api/terms/publish/{id}` - Publish

@@ -11,8 +11,10 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     List<Category> findAllByOrderByNameAsc();
+    List<Category> findByNameStartingWithIgnoreCaseOrderByNameAsc(String prefix);
     Optional<Category> findByNameIgnoreCase(String name);
     boolean existsBySlug(String slug);
+    boolean existsBySlugAndIdNot(String slug, Integer id);
 
 }
 

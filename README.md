@@ -200,7 +200,8 @@ src/main/java/com/imperialpedia/api/
 │
 ├── 🎮 controller/
 │   ├── DefaultController.java         │ System info endpoint
-│   └── TermController.java            │ 12 term operation endpoints
+│   ├── TermController.java            │ Term operation endpoints
+│   └── CategoryController.java        │ Category retrieval and CRUD endpoints
 │
 ├── ⚙️ service/
 │   ├── TermService.java               │ Core business logic
@@ -250,7 +251,8 @@ src/main/java/com/imperialpedia/api/
 │   └── RateLimitProperties.java       │ Rate-limit rule config
 │
 └── 📋 interfaces/
-    └── TermServiceInterface.java      │ Service contract
+    ├── TermServiceInterface.java      │ Term service contract
+    └── CategoryServiceInterface.java  │ Category service contract
 ```
 
 ---
@@ -266,6 +268,7 @@ src/main/java/com/imperialpedia/api/
 | `GET /terms/draft?letter=X` | Draft terms (optional letter filter) |
 | `GET /terms/slug/{slug}` | Term by slug |
 | `GET /terms/{id}` | Term by UUID |
+| `GET /categories[?letter=X]` | Categories (all or by starting letter) |
 
 > Base path: all endpoints are served under `/api`.
 
@@ -274,6 +277,7 @@ src/main/java/com/imperialpedia/api/
 | Endpoint | Purpose |
 |----------|---------|
 | `POST /terms/create` | Create new term |
+| `POST /categories/create` | Create new category |
 
 ### 🔄 **Update Endpoints** (PUT/PATCH)
 
@@ -281,6 +285,8 @@ src/main/java/com/imperialpedia/api/
 |----------|---------|
 | `PUT /terms/update/{id}` | Full update (all required fields) |
 | `PATCH /terms/update/{id}` | Partial update (optional fields) |
+| `PUT /categories/update/{id}` | Full category update |
+| `PATCH /categories/update/{id}` | Partial category update |
 
 ### 🎛️ **Status Endpoints** (PUT)
 
@@ -295,6 +301,7 @@ src/main/java/com/imperialpedia/api/
 | Endpoint | Purpose |
 |----------|---------|
 | `DELETE /terms/delete/{id}` | Delete term |
+| `DELETE /categories/delete/{id}` | Delete category |
 
 ### ℹ️ **System Endpoint** (GET)
 
