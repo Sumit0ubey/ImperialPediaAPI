@@ -18,7 +18,7 @@ public class CorsProperties {
     private List<String> allowedMethods = new ArrayList<>(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     private List<String> allowedHeaders = new ArrayList<>(List.of("*"));
     private List<String> exposedHeaders = new ArrayList<>(List.of("X-Rate-Limit-Remaining", "Retry-After"));
-    private boolean allowCredentials = true;
+    private boolean allowCredentials = false;
     private long maxAge = 3600;
 
     @PostConstruct
