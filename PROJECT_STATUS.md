@@ -50,6 +50,7 @@
 - Case-insensitive slug and category matching
 - Endpoint-specific, configurable rate limiting (Bucket4j)
 - Per-client and per-endpoint-group request buckets
+- Property-driven CORS policy with credentials/wildcard safety validation
 
 ### ✅ Clean Code Architecture
 - Service layer for business logic
@@ -101,6 +102,7 @@
 ✅ Comprehensive validation. <br/>
 ✅ Consistent error handling. <br/>
 ✅ Configurable endpoint rate limiting. <br/>
+✅ Configurable CORS for frontend integration. <br/>
 ✅ Production-ready quality. <br/>
 ✅ Zero compilation errors. <br/>
 ✅ All tests passing. <br/>

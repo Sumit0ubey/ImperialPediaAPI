@@ -46,6 +46,15 @@
 | **Content Type** | `application/json` |
 | **Authentication** | None (Public API) |
 | **Rate Limiting** | Enabled (Bucket4j, configurable) |
+| **CORS** | Enabled, property-driven (`cors.*`) |
+
+### 🌍 CORS Behavior
+
+- CORS policy is configured through `application.properties` (`cors.*`) or `CORS_*` environment variables.
+- Default development origin: `http://localhost:3000`.
+- Credentials are supported when explicitly enabled.
+- Response headers expose `X-Rate-Limit-Remaining` and `Retry-After` for client throttling handling.
+- Invalid configuration is blocked at startup when wildcard `*` is combined with credentials.
 
 ---
 
@@ -866,6 +875,7 @@ curl http://localhost:8080/api/terms/letter/l
 - ✅ Consistent response format with ApiResponse wrapper
 - ✅ Utility classes for input parsing
 - ✅ Complete error handling
+- ✅ Property-driven CORS configuration with startup validation
 
 **Known Limitations:**
 - ❌ No authentication (will be added in v2.0)

@@ -134,10 +134,12 @@ public class TermService implements TermServiceInterface {
         normalizeAddTermInput(request);
         ensureSlugAvailable(request.getSlug(), term.getSlug());
 
-        modelMapper.map(request, term);
-        term.setStatus(request.getStatus() != null ? request.getStatus() : TermStatus.DRAFT);
-        term.setCategories(resolveCategoriesByName(request.getCategoryNames()));
-        term.setRelatedTerms(buildRelatedLinks(term, resolveRelatedTerms(request)));
+        List<Category> categories = resolveCategoriesByName(request.getCategoryNames());
+        List<RelatedTerm> relatedLinks = buildRelatedLinks(term, resolveRelatedTerms(request));
+
+        applyAddTermFields(term, request);
+        term.setCategories(categories);
+        term.setRelatedTerms(relatedLinks);
 
         return saveAndBuildDetail(term);
     }
@@ -282,6 +284,16 @@ public class TermService implements TermServiceInterface {
                     .map(TermInputUtils::normalizeLowercase)
                     .toList());
         }
+    }
+
+    private void applyAddTermFields(Term term, AddTerm request) {
+        term.setTitle(request.getTitle());
+        term.setSlug(request.getSlug());
+        term.setContent(request.getContent());
+        term.setSeoTitle(request.getSeoTitle());
+        term.setSeoDescription(request.getSeoDescription());
+        term.setFeaturedImageUrl(request.getFeaturedImageUrl());
+        term.setStatus(request.getStatus() != null ? request.getStatus() : TermStatus.DRAFT);
     }
 
     private TermDetailResponse getTermDetails(Term term) {

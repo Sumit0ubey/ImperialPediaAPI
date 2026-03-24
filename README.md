@@ -463,7 +463,16 @@ APP_NAME="ImperialPedia API"
 APP_DESCRIPTION="Backed service for ImperialPedia platform"
 APP_VERSION=1.0.0
 APP_ENVIRONMENT=local
-APP_STATUS=active
+APP_STATUS=UP
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+CORS_ALLOWED_ORIGIN_PATTERNS=
+CORS_ALLOWED_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
+CORS_ALLOWED_HEADERS=*
+CORS_EXPOSED_HEADERS=X-Rate-Limit-Remaining,Retry-After
+CORS_ALLOW_CREDENTIALS=true
+CORS_MAX_AGE=3600
 
 # Server Configuration
 SERVER_PORT=8080
@@ -476,6 +485,12 @@ LOGGING_LEVEL=INFO
 ### Application Properties
 
 See `src/main/resources/application.properties` for detailed configuration.
+
+### CORS Notes
+
+- CORS settings are fully configurable using `cors.*` properties (or `CORS_*` env variables).
+- When credentials are enabled, wildcard `*` is not valid for origins/patterns.
+- Default local origin is `http://localhost:3000`.
 
 ---
 
