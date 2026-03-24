@@ -11,7 +11,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 **Status:** ![Build](https://img.shields.io/badge/Build-PASSING-brightgreen?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-1%2F1%20PASSED-brightgreen?style=flat-square)
+![Tests](https://img.shields.io/badge/Tests-58%2F58%20PASSED-brightgreen?style=flat-square)
 ![Code Quality](https://img.shields.io/badge/Code%20Quality-A%2B-brightgreen?style=flat-square)
 ![Deployment Ready](https://img.shields.io/badge/Deployment-Ready-brightgreen?style=flat-square)
 
@@ -42,7 +42,7 @@
 **Project Status:** ✅ **COMPLETE AND FULLY FUNCTIONAL**
 
 - **Build Status:** ✅ SUCCESS (0 Errors, 0 Warnings)
-- **Test Coverage:** ✅ 1/1 PASSED
+- **Test Coverage:** ✅ 58/58 PASSED (8 Test Classes)
 - **Compilation:** ✅ 32/32 Source Files
 - **Deployment Ready:** ✅ YES
 
@@ -108,9 +108,9 @@ Project overview and quick reference guide.
 <td width="50%">
 
 ### 🏷️ Category Management
-- ✅ Auto-create categories
+- ✅ Auto-create addCategories
 - ✅ Case-insensitive matching
-- ✅ Multiple categories per term
+- ✅ Multiple addCategories per term
 - ✅ Smart deduplication
 
 </td>
@@ -268,7 +268,7 @@ src/main/java/com/imperialpedia/api/
 | `GET /terms/draft?letter=X` | Draft terms (optional letter filter) |
 | `GET /terms/slug/{slug}` | Term by slug |
 | `GET /terms/{id}` | Term by UUID |
-| `GET /categories[?letter=X]` | Categories (all or by starting letter) |
+| `GET /addCategories[?letter=X]` | Categories (all or by starting letter) |
 
 > Base path: all endpoints are served under `/api`.
 
@@ -277,7 +277,7 @@ src/main/java/com/imperialpedia/api/
 | Endpoint | Purpose |
 |----------|---------|
 | `POST /terms/create` | Create new term |
-| `POST /categories/create` | Create new category |
+| `POST /addCategories/create` | Create new category |
 
 ### 🔄 **Update Endpoints** (PUT/PATCH)
 
@@ -285,8 +285,8 @@ src/main/java/com/imperialpedia/api/
 |----------|---------|
 | `PUT /terms/update/{id}` | Full update (all required fields) |
 | `PATCH /terms/update/{id}` | Partial update (optional fields) |
-| `PUT /categories/update/{id}` | Full category update |
-| `PATCH /categories/update/{id}` | Partial category update |
+| `PUT /addCategories/update/{id}` | Full category update |
+| `PATCH /addCategories/update/{id}` | Partial category update |
 
 ### 🎛️ **Status Endpoints** (PUT)
 
@@ -301,7 +301,7 @@ src/main/java/com/imperialpedia/api/
 | Endpoint | Purpose |
 |----------|---------|
 | `DELETE /terms/delete/{id}` | Delete term |
-| `DELETE /categories/delete/{id}` | Delete category |
+| `DELETE /addCategories/delete/{id}` | Delete category |
 
 ### ℹ️ **System Endpoint** (GET)
 
@@ -372,7 +372,9 @@ src/main/java/com/imperialpedia/api/
 
 ### Test Results
 ```
-Tests Run:      1/1
+Test Classes:   8
+Test Methods:   58
+Tests Run:      58/58
 Failures:       0
 Errors:         0
 Success Rate:   100%
@@ -429,7 +431,7 @@ All inputs validated for:
 - ✅ Type validation
 - ✅ Length constraints
 - ✅ Pattern validation (slug format)
-- ✅ Uniqueness checks (slugs, categories)
+- ✅ Uniqueness checks (slugs, addCategories)
 - ✅ Reference existence (related terms)
 - ✅ Self-reference prevention
 - ✅ Automatic normalization (lowercase, trim, deduplicate)

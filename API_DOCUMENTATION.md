@@ -245,7 +245,7 @@ GET /terms/slug/{slug}
 
 #### ✅ Success Response (200)
 
-Full TermDetailResponse with categories and related terms.
+Full TermDetailResponse with addCategories and related terms.
 
 #### ❌ Error Responses
 
@@ -272,7 +272,7 @@ GET /terms/{id}
 
 #### ✅ Success Response (200)
 
-Full TermDetailResponse with categories and related terms.
+Full TermDetailResponse with addCategories and related terms.
 
 #### ❌ Error Responses
 
@@ -285,10 +285,10 @@ Full TermDetailResponse with categories and related terms.
 
 ### 1.6 Get Categories (Optional Letter Filter)
 
-Retrieve all categories, or filter categories by starting letter.
+Retrieve all addCategories, or filter addCategories by starting letter.
 
 ```http
-GET /categories[?letter=X]
+GET /addCategories[?letter=X]
 ```
 
 #### 📋 Parameters
@@ -296,7 +296,7 @@ GET /categories[?letter=X]
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `letter` | String | ❌ No | Optional single alphabetic character (e.g., "?letter=A") |
-| | | | If blank/missing, returns all categories |
+| | | | If blank/missing, returns all addCategories |
 
 #### ✅ Success Response (200)
 
@@ -322,7 +322,7 @@ GET /categories[?letter=X]
 | Code | Scenario |
 |------|----------|
 | `400` | Invalid letter filter |
-| `404` | No categories found for the provided letter |
+| `404` | No addCategories found for the provided letter |
 
 ---
 
@@ -330,7 +330,7 @@ GET /categories[?letter=X]
 
 ### 2.1 Create New Term
 
-Create a new term with complete metadata, categories, and related terms.
+Create a new term with complete metadata, addCategories, and related terms.
 
 ```http
 POST /terms/create
@@ -410,7 +410,7 @@ Content-Type: application/json
 Create a new category.
 
 ```http
-POST /categories/create
+POST /addCategories/create
 Content-Type: application/json
 ```
 
@@ -522,7 +522,7 @@ Content-Type: application/json
 | `seoDescription` | String | Updates SEO description |
 | `featuredImageUrl` | String | Updates image URL |
 | `status` | Enum | Updates status |
-| `categoryNames` | String[] | Replaces all categories |
+| `categoryNames` | String[] | Replaces all addCategories |
 | `relatedTerms` | String[] | Replaces all related terms |
 
 #### ✅ Success Response (200)
@@ -544,7 +544,7 @@ Full TermDetailResponse after patch.
 Completely replace category data.
 
 ```http
-PUT /categories/update/{id}
+PUT /addCategories/update/{id}
 Content-Type: application/json
 ```
 
@@ -581,7 +581,7 @@ Returns updated `Categories` payload.
 Partially update category fields.
 
 ```http
-PATCH /categories/update/{id}
+PATCH /addCategories/update/{id}
 Content-Type: application/json
 ```
 
@@ -740,7 +740,7 @@ DELETE /terms/delete/{id}
 Delete a category if it is not linked to existing terms.
 
 ```http
-DELETE /categories/delete/{id}
+DELETE /addCategories/delete/{id}
 ```
 
 #### 📋 Parameters
@@ -773,7 +773,7 @@ DELETE /categories/delete/{id}
 
 ### TermDetailResponse
 
-Complete term information with relationships and categories.
+Complete term information with relationships and addCategories.
 
 ```json
 {
@@ -1035,7 +1035,7 @@ curl http://localhost:8080/api/terms/letter/l
 
 ### Relationship Loading
 
-- **EntityGraph:** Related terms and categories are eagerly loaded for detail endpoints
+- **EntityGraph:** Related terms and addCategories are eagerly loaded for detail endpoints
 - **Performance:** Optimized for single-record retrieval with full relationship data
 - **Lazy Loading:** List endpoints use basic projection for efficiency
 

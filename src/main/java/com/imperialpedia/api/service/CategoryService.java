@@ -1,6 +1,7 @@
 package com.imperialpedia.api.service;
 
-import com.imperialpedia.api.dto.termdto.Categories;
+import com.imperialpedia.api.dto.termdto.AddCategories;
+import com.imperialpedia.api.dto.termdto.CategoryDetailResponse;
 import com.imperialpedia.api.entity.term.Category;
 import com.imperialpedia.api.exception.ArgumentException;
 import com.imperialpedia.api.exception.IntegrityViolationException;
@@ -36,15 +37,15 @@ public class CategoryService implements CategoryServiceInterface {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public List<Categories> getAllCategories() {
+    public List<CategoryDetailResponse> getAllCategories() {
         List<Category> categories = categoryRepository.findAllByOrderByNameAsc();
         return categories.stream()
-                .map(category -> modelMapper.map(category, Categories.class))
+                .map(this::mapCategoryToDetailResponse)
                 .toList();
     }
 
     @Override
-    public List<Categories> getCategoriesByLetter(String letter) {
+    public List<CategoryDetailResponse> getCategoriesByLetter(String letter) {
         String normalizedLetter = TermInputUtils.normalizeOptionalLetter(letter);
         if (normalizedLetter == null) {
             throw new ArgumentException("Letter must be a single alphabetic character");
@@ -56,33 +57,33 @@ public class CategoryService implements CategoryServiceInterface {
         }
 
         return categories.stream()
-                .map(category -> modelMapper.map(category, Categories.class))
+                .map(this::mapCategoryToDetailResponse)
                 .toList();
     }
 
     @Override
     @Transactional
-    public Categories createCategories(Categories categories) {
+    public AddCategories createCategories(AddCategories categories) {
         if (categories == null) {
             throw new ArgumentException("Category payload must not be null");
         }
 
         Category savedCategory = createCategorySafely(categories.getName());
-        return modelMapper.map(savedCategory, Categories.class);
+        return modelMapper.map(savedCategory, AddCategories.class);
     }
 
     @Override
     @Transactional
-    public Categories updateCategory(int id, Categories categories) {
+    public AddCategories updateCategory(int id, AddCategories addCategories) {
         validateCategoryId(id);
-        if (categories == null) {
+        if (addCategories == null) {
             throw new ArgumentException("Category payload must not be null");
         }
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-        String normalizedName = normalizeCategoryName(categories.getName());
+        String normalizedName = normalizeCategoryName(addCategories.getName());
         validateNameLength(normalizedName);
         ensureCategoryNameAvailable(normalizedName, id);
 
@@ -90,12 +91,12 @@ public class CategoryService implements CategoryServiceInterface {
         category.setSlug(generateUniqueCategorySlugForUpdate(normalizedName, id));
 
         Category saved = categoryRepository.save(category);
-        return modelMapper.map(saved, Categories.class);
+        return modelMapper.map(saved, AddCategories.class);
     }
 
     @Override
     @Transactional
-    public Categories patchCategory(int id, Map<String, Object> request) {
+    public AddCategories patchCategory(int id, Map<String, Object> request) {
         validateCategoryId(id);
         if (request == null || request.isEmpty()) {
             throw new ArgumentException("Patch payload must not be empty");
@@ -115,7 +116,7 @@ public class CategoryService implements CategoryServiceInterface {
             throw new ArgumentException("name must be a string");
         }
 
-        return updateCategory(id, new Categories(name));
+        return updateCategory(id, new AddCategories(name));
     }
 
     @Override
@@ -240,5 +241,19 @@ public class CategoryService implements CategoryServiceInterface {
         }
 
         return candidate;
+    }
+
+    private CategoryDetailResponse mapCategoryToDetailResponse(Category category) {
+        CategoryDetailResponse response = new CategoryDetailResponse();
+        response.setId(category.getId());
+        response.setName(category.getName());
+        response.setSlug(category.getSlug());
+        
+        List<CategoryDetailResponse.TermSlug> termSlugs = category.getTerms().stream()
+                .map(term -> new CategoryDetailResponse.TermSlug(term.getSlug()))
+                .toList();
+        response.setTerms(termSlugs);
+        
+        return response;
     }
 }

@@ -1,6 +1,6 @@
 package com.imperialpedia.api.controller;
 
-import com.imperialpedia.api.dto.termdto.Categories;
+import com.imperialpedia.api.dto.termdto.AddCategories;
 import com.imperialpedia.api.response.ApiResponse;
 import com.imperialpedia.api.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,7 +64,7 @@ public class CategoryController {
                     description = "Category payload",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Categories.class),
+                            schema = @Schema(implementation = AddCategories.class),
                             examples = {
                                     @ExampleObject(name = "Example", value = """
                                             {
@@ -80,7 +80,7 @@ public class CategoryController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Validation error"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "Category already exists")
     })
-    public ResponseEntity<?> createCategory(@Valid @RequestBody Categories request) {
+    public ResponseEntity<?> createCategory(@Valid @RequestBody AddCategories request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(201, "Category created successfully", categoryService.createCategories(request)));
     }
@@ -96,7 +96,7 @@ public class CategoryController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Validation error"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Category not found")
     })
-    public ResponseEntity<?> updateCategory(@PathVariable int id, @Valid @RequestBody Categories request) {
+    public ResponseEntity<?> updateCategory(@PathVariable int id, @Valid @RequestBody AddCategories request) {
         return ResponseEntity.ok(ApiResponse.success("Category updated successfully", categoryService.updateCategory(id, request)));
     }
 
