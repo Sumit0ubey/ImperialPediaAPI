@@ -21,7 +21,7 @@ public class RateLimitProperties {
     @Data
     public static class DefaultRule {
         private String group = "default";
-        private long capacity = 25;
+        private long capacity = 15;
         private Duration window = Duration.ofMinutes(1);
     }
 
@@ -30,7 +30,7 @@ public class RateLimitProperties {
         private MatchType type = MatchType.PREFIX;
         private String pattern;
         private String group;
-        private long capacity = 25;
+        private long capacity = 15;
         private Duration window = Duration.ofMinutes(1);
     }
 
