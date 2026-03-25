@@ -54,7 +54,7 @@
 - Java 22+
 - Maven 3.8+
 - PostgreSQL 17.8+
-- Git
+- Git/GitHub
 
 ### Installation
 
